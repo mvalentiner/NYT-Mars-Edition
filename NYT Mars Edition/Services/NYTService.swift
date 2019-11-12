@@ -49,10 +49,16 @@ internal class NYTServiceImplementation: NYTService {
 	}
 
 	internal var nytArticles = Bindable<[NYTArticleViewModel]>([])
-//	private var knownArticleSet = Set<Int>()
+	
+	internal let articleAccessQueue = DispatchQueue(label: "ArticleAccessQueue", attributes: .concurrent)
+
+	private func append(article viewModel: NYTArticleViewModel) {
+		articleAccessQueue.sync(flags: .barrier) {
+			self.nytArticles.value.append(viewModel)
+		}
+	}
 	
 	internal func refreshArticles() {
-		self.nytArticles.value.removeAll()
 		NYTArticlesRequest().load { decodableRequestResult in
 			switch decodableRequestResult {
 			case .failure(let dataRequestError):
@@ -68,12 +74,8 @@ internal class NYTServiceImplementation: NYTService {
 							print("\(#function): dataRequestError == \(dataRequestError)")
 							break
 						case .success(let image):
-//							guard self.knownArticleSet.contains(article.id) == false else {
-//								return
-//							}
-//							self.knownArticleSet.insert(article.id)
 							let viewModel = NYTArticleViewModel(id: article.id, title: article.title, body: article.body, images: image)
-							self.nytArticles.value.append(viewModel)
+							self.append(article: viewModel)
 							break
 						}
 					}

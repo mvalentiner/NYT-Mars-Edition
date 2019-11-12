@@ -29,4 +29,24 @@ class NYTServiceTests: XCTestCase {
 		
 		wait(for: [expectation], timeout: 10.0)
     }
+
+	func testNYTService_concurrentRefreshArticles() {
+		let expectation = XCTestExpectation(description: "Test NYTArticlesRequestTests.testNYTArticlesRequest_loadArticles")
+
+		let maxCount = 999
+		var responseCount = 0
+		self.nytService.nytArticles.bind { (_, _) in
+			responseCount += 1
+			if responseCount == maxCount {
+				XCTAssertTrue(true)
+				expectation.fulfill()
+			}
+		}
+
+		for _ in 0..<(maxCount + 1) {
+			nytService.refreshArticles()
+		}
+		
+		wait(for: [expectation], timeout: 30)
+	}
 }
