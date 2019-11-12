@@ -8,26 +8,21 @@
 
 import UIKit
 
-private struct ArticleListViewModel: Hashable {
-	let articleId: UUID
-	let title: String
-	let image: UIImage
-}
-
 class ArticleListViewController : UITableViewController {
 
 	// Dependency(s)
-	private let nytService: NYTService
-
-	// View model
-	private var articles = Bindable<Set<ArticleListViewModel>>([])
+	private var nytService: NYTService
 	
 	init(nytService: NYTService) {
 		self.nytService = nytService
 
 		super.init(style: .plain)
-		
-		self.articles.bind { (oldArticleList, newArticleList) in
+
+		self.nytService.nytArticles.bind { (oldArticleList, newArticleList) in
+			guard oldArticleList != newArticleList else {
+				// No change, so don't update the UI.
+				return
+			}
 			DispatchQueue.main.async {
 				self.tableView.reloadData()
 			}
@@ -38,43 +33,22 @@ class ArticleListViewController : UITableViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	override func viewDidLoad() {
-		refreshArticles()
-	}
-	
-	private func refreshArticles() {
-		nytService.refreshArticles() { dataRequestResult in
-			switch dataRequestResult {
-			case .failure(let dataRequestError):
-				// TODO: show error alert
-				print("\(#function): dataRequestError == \(dataRequestError)")
-				break
-			case .success(let articles):
-				articles.forEach { (article) in
-					self.requestTopImage(for: article)
-				}
-				break
-			}
-		}
-	}
+	static let articleCellReuseId = "articleCell"
 
-	private func requestTopImage(for article: NYTArticle) {
-		nytService.requestTopImage(for: article) { result in
-			switch result {
-			case .failure(let dataRequestError):
-				// TODO: show error alert
-				print("\(#function): dataRequestError == \(dataRequestError)")
-				break
-			case .success(let image):
-				let viewModel = ArticleListViewModel(articleId: article.id, title: article.title, image: image)
-				self.articles.value.insert(viewModel)
-				break
-			}
-		}
+	override func viewDidLoad() {
+		self.tableView.register(ArticleCell.self, forCellReuseIdentifier: ArticleListViewController.articleCellReuseId)
+		nytService.refreshArticles()
 	}
 
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 0
+		switch section {
+		case 0:
+			return 1
+		case 1:
+			return self.nytService.nytArticles.value.count
+		default:
+			fatalError("\(#function), indexPath.section out of range.")
+		}
 	}
 
 	override func numberOfSections(in tableView: UITableView) -> Int {
@@ -82,16 +56,50 @@ class ArticleListViewController : UITableViewController {
 	}
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		return UITableViewCell()
+		switch indexPath.section {
+		case 0:
+			let cell = UITableViewCell()
+			cell.contentView.backgroundColor = .magenta
+			return cell	//TODO
+		case 1:
+			let article = self.nytService.nytArticles.value[indexPath.row]
+			guard let cell = tableView.dequeueReusableCell(withIdentifier: ArticleListViewController.articleCellReuseId, for: indexPath) as? ArticleCell else {
+				return ArticleCell(for: article)
+			}
+			cell.configure(for: article)
+			return cell
+		default:
+			fatalError("\(#function), indexPath.section out of range.")
+		}
 	}
 
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return CGFloat()
+		// TODO
+		return CGFloat(50.0)
 	}
 
 	override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
+		// TODO
 		return nil
 	}
+}
 
+class ArticleCell: UITableViewCell {
+	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+		super.init(style: style, reuseIdentifier: reuseIdentifier)
+	}
+
+	init(for article: NYTArticleViewModel) {
+		super.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: ArticleListViewController.articleCellReuseId)
+		configure(for: article)
+		contentView.backgroundColor = .cyan
+	}
+
+	internal func configure(for article: NYTArticleViewModel) {
+		textLabel?.text = article.title
+	}
 	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 }

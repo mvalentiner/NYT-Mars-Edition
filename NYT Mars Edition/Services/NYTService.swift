@@ -21,9 +21,17 @@ extension ServiceRegistryImplementation {
 	}
 }
 
+struct NYTArticleViewModel: Equatable {
+	let id: Int
+	let title: String
+	let body: String
+	let images: UIImage
+}
+
 /// NYTService Interface
 protocol NYTService: SOAService {
-	func refreshArticles(onCompletion: @escaping (Result<NYTArticlesRequest.RequestedDataType, DataRequestError>)->Void)
+	var nytArticles: Bindable<[NYTArticleViewModel]> { get set }
+	func refreshArticles()
 }
 
 /// NYTService default implementation
@@ -33,20 +41,53 @@ extension NYTService {
 			return NYTServiceName.serviceName
 		}
 	}
+}
 
-	internal func refreshArticles(onCompletion: @escaping (Result<NYTArticlesRequest.RequestedDataType, DataRequestError>) -> Void) {
+internal class NYTServiceImplementation: NYTService {
+	static func register() {
+		NYTServiceImplementation().register()
+	}
+
+	internal var nytArticles = Bindable<[NYTArticleViewModel]>([])
+//	private var knownArticleSet = Set<Int>()
+	
+	internal func refreshArticles() {
+		self.nytArticles.value.removeAll()
 		NYTArticlesRequest().load { decodableRequestResult in
-			onCompletion(decodableRequestResult)
+			switch decodableRequestResult {
+			case .failure(let dataRequestError):
+				// TODO: show error alert
+				print("\(#function): dataRequestError == \(dataRequestError)")
+				break
+			case .success(let articles):
+				articles.forEach { (article) in
+					self.requestTopImage(for: article) { result in
+						switch result {
+						case .failure(let dataRequestError):
+							// TODO: handle no top image
+							print("\(#function): dataRequestError == \(dataRequestError)")
+							break
+						case .success(let image):
+//							guard self.knownArticleSet.contains(article.id) == false else {
+//								return
+//							}
+//							self.knownArticleSet.insert(article.id)
+							let viewModel = NYTArticleViewModel(id: article.id, title: article.title, body: article.body, images: image)
+							self.nytArticles.value.append(viewModel)
+							break
+						}
+					}
+				}
+				break
+			}
 		}
 	}
 
-	internal func requestTopImage(for article: NYTArticle, onCompletion: @escaping (Result<UIImage, DataRequestError>) -> Void) {
-		let url = article.images.first { (nytImage) -> Bool in
-			nytImage.isTopImage == true
-		}
-		
+	private func requestTopImage(for article: NYTArticle, onCompletion: @escaping (Result<UIImage, DataRequestError>) -> Void) {
+		let url = article.images.first { $0.isTopImage == true }
 		guard let topImageUrl = url ?? article.images.first else {
-			// TODO: handle no top image
+			// No top image
+			onCompletion(.failure(.nilDataError))
 			return
 		}
 		
@@ -60,11 +101,5 @@ extension NYTService {
 				break
 			}
 		}
-	}
-}
-
-internal class NYTServiceImplementation: NYTService {
-	static func register() {
-		NYTServiceImplementation().register()
 	}
 }

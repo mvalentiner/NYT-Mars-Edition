@@ -31,7 +31,7 @@ internal class AppNavigationCoordinator: MainAppCoordinator {
 
 	/// Navigation
 	internal func presentArticleScreen() {
-		print(#function)
+//		print(#function)
 //		let hostingController = UIHostingController(rootView: contentView)
 //		present(hostingController)
 	}
