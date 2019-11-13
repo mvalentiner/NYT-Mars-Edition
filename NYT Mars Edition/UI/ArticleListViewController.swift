@@ -31,9 +31,13 @@ class ArticleListViewController : UITableViewController {
 	// ViewModel
 	private var articleSummaries = Bindable<[NYTArticleSummaryViewModel]>([])
 
-	init(appProperties: AppProperties, nytService: NYTService, translationService: TranslationService) {
+	// Action(s)
+	let handleArticleSelect: (Int) -> Void
+
+	init(appProperties: AppProperties, nytService: NYTService, translationService: TranslationService, handleArticleSelect: @escaping (Int) -> Void) {
 		self.appProperties = appProperties
 		self.nytService = nytService
+		self.handleArticleSelect = handleArticleSelect
 
 		super.init(style: .plain)
 
@@ -131,14 +135,22 @@ class ArticleListViewController : UITableViewController {
 		}
 	}
 
+	static let articleCellHeight = CGFloat(100.0)
+
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		// TODO
-		return CGFloat(50.0)
+		switch indexPath.section {
+		case 0:
+			return CGFloat(50.0)
+		case 1:
+			return ArticleListViewController.articleCellHeight
+		default:
+			fatalError("\(#function), indexPath.section out of range.")
+		}
 	}
 
-	override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
-		// TODO
-		return nil
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		let article = articleSummaries.value[indexPath.row]
+		self.handleArticleSelect(article.id)
 	}
 	
 	private func handleTranslateToggle(isOn: Bool) {
@@ -168,9 +180,7 @@ fileprivate class TranslateSwitchCell: UITableViewCell  {
 		contentView.addSubview(switchView)
 		switchView.anchorTo(right: contentView.rightAnchor, rightPadding: 20.0)
 		switchView.anchorToYCenterOfParent()
-//for familyName in UIFont.familyNames {
-//	print(UIFont.fontNames(forFamilyName: familyName))
-//}
+
 		let label = UILabel()
 		let attributes = [NSAttributedString.Key.font: UIFont(name: "TimesNewRomanPS-BoldMT", size: CGFloat(20.0)) as Any]
 		label.attributedText = NSAttributedString(string: "Translate", attributes: attributes)
@@ -194,18 +204,55 @@ fileprivate class TranslateSwitchCell: UITableViewCell  {
 }
 
 fileprivate class ArticleCell: UITableViewCell {
+	let thunmbnailImageView: UIImageView = {
+		let image = UIImageView(image: UIImage(named: "image_placeholder"))
+		image.contentMode = .scaleAspectFit
+		return image
+	}()
+	let titleLabel: UILabel = {
+		let label = UILabel()
+		label.adjustsFontSizeToFitWidth = true
+		label.lineBreakMode = .byWordWrapping
+		label.numberOfLines = 5
+		return label
+	}()
+
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-	}
-
-	fileprivate init(for article: ArticleListViewController.NYTArticleSummaryViewModel) {
-		super.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: ArticleListViewController.articleCellReuseId)
-		configure(for: article)
-		contentView.backgroundColor = .cyan
+		
+		contentView.addSubview(thunmbnailImageView)
+		contentView.addSubview(titleLabel)
 	}
 
 	fileprivate func configure(for article: ArticleListViewController.NYTArticleSummaryViewModel) {
-		textLabel?.text = article.title
+		thunmbnailImageView.image = article.image
+		// Position the image view
+		thunmbnailImageView.anchorTo(left: contentView.leftAnchor, leftPadding: 20.0)
+		thunmbnailImageView.anchorToYCenterOfParent()
+		// Size the image view
+		let cgImage = article.image.cgImage!
+		let height = min(ArticleListViewController.articleCellHeight - 10.0, CGFloat(cgImage.height))
+		let scale = height / CGFloat(cgImage.height)
+		let width = CGFloat(cgImage.width) * scale
+		thunmbnailImageView.constrainTo(width: width)
+		thunmbnailImageView.constrainTo(height: height)
+
+		let font = UIFont(name: "TimesNewRomanPS-BoldMT", size: CGFloat(18.0)) as Any
+		let paragraphStyle: NSMutableParagraphStyle = {
+			let paragraphStyle = NSMutableParagraphStyle()
+			paragraphStyle.alignment = .left
+			paragraphStyle.lineBreakMode = .byWordWrapping
+			return paragraphStyle
+		}()
+		let attributes: [NSAttributedString.Key: Any] = [
+			.font: font,
+			.paragraphStyle: paragraphStyle
+		]
+		titleLabel.attributedText = NSAttributedString(string: article.title, attributes: attributes)
+		// Position the label
+		titleLabel.anchorTo(left: thunmbnailImageView.rightAnchor, top: contentView.topAnchor, right: contentView.rightAnchor, bottom: contentView.bottomAnchor,
+			leftPadding: 20.0, topPadding: 10.0, rightPadding: 20.0, bottomPadding: 10.0)
+		// Size the label
 	}
 	
 	required init?(coder: NSCoder) {

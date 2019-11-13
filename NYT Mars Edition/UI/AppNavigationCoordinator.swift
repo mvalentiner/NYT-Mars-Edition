@@ -14,7 +14,7 @@ import UIKit
 /// MainAppCoordinator aggregates the generic functionality of ViewControllerCoordinator with the app specific navigation functions defined here.
 protocol MainAppCoordinator: ViewControllerCoordinator {
 	func presentArticleListScreen()
-	func presentArticleScreen()
+	func presentArticleScreen(articleId: Int) -> Void
 }
 
 internal class AppNavigationCoordinator: MainAppCoordinator {
@@ -26,14 +26,14 @@ internal class AppNavigationCoordinator: MainAppCoordinator {
 	
 	internal func presentArticleListScreen() {
 		let articleListViewController = ArticleListViewController(appProperties: ServiceRegistry.appProperties, nytService: ServiceRegistry.nytService,
-			translationService: ServiceRegistry.translationService)
+			translationService: ServiceRegistry.translationService, handleArticleSelect: presentArticleScreen)
 		present(articleListViewController)
 	}
 
-	/// Navigation
-	internal func presentArticleScreen() {
-//		print(#function)
-//		let hostingController = UIHostingController(rootView: contentView)
-//		present(hostingController)
+	internal func presentArticleScreen(articleId: Int) -> Void {
+		print("\(#function), articleId = \(articleId)")
+		let articleScreen = ArticleScreen()
+		let hostingController = UIHostingController(rootView: articleScreen)
+		present(hostingController)
 	}
 }
