@@ -37,6 +37,8 @@ class ArticleListViewController : UITableViewController {
 
 		super.init(style: .plain)
 
+		self.setNavTitle(isTranslateOn: appProperties.isTranslateOn.value)
+
 		// Bind to NYTService.nytArticles to update view model when there are new nytArticles.
 		self.nytService.nytArticles.bind { (oldArticleList, newArticleList) in
 			guard oldArticleList != newArticleList else {
@@ -74,6 +76,8 @@ class ArticleListViewController : UITableViewController {
 				NYTArticleSummaryViewModel(from: $0, using: translationService, shouldTranslate: newValue)
 			}
 			self.articleSummaries.value.append(contentsOf: summaries)
+			
+			self.setNavTitle(isTranslateOn: newValue)
 		}
 	}
 	
@@ -140,6 +144,14 @@ class ArticleListViewController : UITableViewController {
 	private func handleTranslateToggle(isOn: Bool) {
 		self.appProperties.isTranslateOn.value = isOn
 	}
+	
+	private func setNavTitle(isTranslateOn: Bool) {
+		let label = UILabel()
+		let title = isTranslateOn ? "NYT Martian Edition" : "NYT"
+		let attributes = [NSAttributedString.Key.font: UIFont(name: "TimesNewRomanPS-BoldMT", size: CGFloat(20.0)) as Any]
+		label.attributedText = NSAttributedString(string: title, attributes: attributes)
+		self.navigationItem.titleView = label
+	}
 }
 
 fileprivate class TranslateSwitchCell: UITableViewCell  {
@@ -156,6 +168,15 @@ fileprivate class TranslateSwitchCell: UITableViewCell  {
 		contentView.addSubview(switchView)
 		switchView.anchorTo(right: contentView.rightAnchor, rightPadding: 20.0)
 		switchView.anchorToYCenterOfParent()
+//for familyName in UIFont.familyNames {
+//	print(UIFont.fontNames(forFamilyName: familyName))
+//}
+		let label = UILabel()
+		let attributes = [NSAttributedString.Key.font: UIFont(name: "TimesNewRomanPS-BoldMT", size: CGFloat(20.0)) as Any]
+		label.attributedText = NSAttributedString(string: "Translate", attributes: attributes)
+		contentView.addSubview(label)
+		label.anchorTo(right: switchView.leftAnchor, rightPadding: 10.0)
+		label.anchorToYCenterOfParent()
 	}
 
 	fileprivate func configure(with switchState: Bool, andSwitchToggleHandler handler: @escaping (Bool) -> Void) {
