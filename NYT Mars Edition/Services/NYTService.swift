@@ -12,25 +12,15 @@ private struct NYTServiceName {
 	static let serviceName = "NYTService"
 }
 
-// Extend ServiceRegistry with some syntactic sugar for accessing the NYTService.
-extension ServiceRegistryImplementation {
-	var nytService: NYTService {
-		get {
-			return serviceWith(name: NYTServiceName.serviceName) as! NYTService	// Intentional force unwrapping
-		}
-	}
-}
-
-struct NYTArticleViewModel: Equatable {
-	let id: Int
-	let title: String
-	let body: String
-	let images: UIImage
+struct NYTArticle: Equatable {
+	let model: NYTArticleModel
+	let topImage: UIImage
+	let images: [UIImage]
 }
 
 /// NYTService Interface
 protocol NYTService: SOAService {
-	var nytArticles: Bindable<[NYTArticleViewModel]> { get set }
+	var nytArticles: Bindable<[NYTArticle]> { get set }
 	func refreshArticles()
 }
 
@@ -48,11 +38,10 @@ internal class NYTServiceImplementation: NYTService {
 		NYTServiceImplementation().register()
 	}
 
-	internal var nytArticles = Bindable<[NYTArticleViewModel]>([])
+	internal var nytArticles = Bindable<[NYTArticle]>([])
 	
 	internal let articleAccessQueue = DispatchQueue(label: "ArticleAccessQueue", attributes: .concurrent)
-
-	private func append(article viewModel: NYTArticleViewModel) {
+	private func append(article viewModel: NYTArticle) {
 		articleAccessQueue.sync(flags: .barrier) {
 			self.nytArticles.value.append(viewModel)
 		}
@@ -74,7 +63,7 @@ internal class NYTServiceImplementation: NYTService {
 							print("\(#function): dataRequestError == \(dataRequestError)")
 							break
 						case .success(let image):
-							let viewModel = NYTArticleViewModel(id: article.id, title: article.title, body: article.body, images: image)
+							let viewModel = NYTArticle(model: article, topImage: image, images: [image])
 							self.append(article: viewModel)
 							break
 						}
@@ -85,14 +74,13 @@ internal class NYTServiceImplementation: NYTService {
 		}
 	}
 
-	private func requestTopImage(for article: NYTArticle, onCompletion: @escaping (Result<UIImage, DataRequestError>) -> Void) {
+	private func requestTopImage(for article: NYTArticleModel, onCompletion: @escaping (Result<UIImage, DataRequestError>) -> Void) {
 		let url = article.images.first { $0.isTopImage == true }
 		guard let topImageUrl = url ?? article.images.first else {
 			// No top image
 			onCompletion(.failure(.nilDataError))
 			return
 		}
-		
 		ImageRequest(withEndpoint: topImageUrl.url).loadImage { dataRequestResult in
 			switch dataRequestResult {
 			case .failure(let dataRequestError):
@@ -102,6 +90,15 @@ internal class NYTServiceImplementation: NYTService {
 				onCompletion(.success(image))
 				break
 			}
+		}
+	}
+}
+
+// Extend ServiceRegistry with some syntactic sugar for accessing the NYTService.
+extension ServiceRegistryImplementation {
+	var nytService: NYTService {
+		get {
+			return serviceWith(name: NYTServiceName.serviceName) as! NYTService	// Intentional force unwrapping
 		}
 	}
 }

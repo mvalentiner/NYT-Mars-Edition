@@ -23,9 +23,10 @@ internal class AppNavigationCoordinator: MainAppCoordinator {
 	init(using rootController: UINavigationController) {
 		self.rootController = rootController
 	}
-
+	
 	internal func presentArticleListScreen() {
-		let articleListViewController = ArticleListViewController(nytService: ServiceRegistry.nytService)
+		let articleListViewController = ArticleListViewController(appProperties: ServiceRegistry.appProperties, nytService: ServiceRegistry.nytService,
+			translationService: ServiceRegistry.translationService)
 		present(articleListViewController)
 	}
 

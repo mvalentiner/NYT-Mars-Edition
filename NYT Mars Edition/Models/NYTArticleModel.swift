@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct NYTArticle: Decodable, Identifiable {
+struct NYTArticleModel: Decodable, Equatable, Identifiable {
 	let id: Int
 	let title: String
 	let body: String
@@ -43,6 +43,10 @@ struct NYTArticle: Decodable, Identifiable {
 		get {
 			return images.first { $0.isTopImage }?.url
 		}
+	}
+
+	static func == (lhs: NYTArticleModel, rhs: NYTArticleModel) -> Bool {
+		return lhs.id == rhs.id
 	}
 }
 

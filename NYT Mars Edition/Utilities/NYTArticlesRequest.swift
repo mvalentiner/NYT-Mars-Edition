@@ -9,7 +9,7 @@
 import Foundation
 
 class NYTArticlesRequest: UnauthenticatedDecodableXMLRequest {	
-	typealias RequestedDataType = [NYTArticle]
+	typealias RequestedDataType = [NYTArticleModel]
 	var endpointURL: String = "http://mobile.public.ec2.nytimes.com.s3-website-us-east-1.amazonaws.com/candidates/content/v1/articles.plist"
 
 	internal func loadArticles(onCompletion: @escaping (Result<NYTArticlesRequest.RequestedDataType, DataRequestError>) -> Void) {
@@ -20,6 +20,6 @@ class NYTArticlesRequest: UnauthenticatedDecodableXMLRequest {
 }
 
 class NYTArticleJSONRequest: UnauthenticatedDecodableJSONRequest {
-	typealias RequestedDataType = [NYTArticle]
+	typealias RequestedDataType = [NYTArticleModel]
 	var endpointURL: String = "http://mobile.public.ec2.nytimes.com.s3-website-us-east-1.amazonaws.com/candidates/content/v1/articles.json"
 }

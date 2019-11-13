@@ -14,7 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// This declaration causes the app ServiceRegistry to be instantiated and services to be registered
 	// prior to application(_ application:, didFinishLaunchingWithOptions:) being called.
 	private let serviceRegistry: ServiceRegistryImplementation = {
+		AppPropertiesImplementation.register()
 		NYTServiceImplementation.register()
+		TranslationServiceImplementation.register(appProperties: ServiceRegistry.appProperties)
 		return ServiceRegistry
 	}()
 

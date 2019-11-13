@@ -7,13 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C4F137A237B4CD8000E994D /* AppProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F1379237B4CD8000E994D /* AppProperties.swift */; };
+		4C4F137C237B6377000E994D /* TranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F137B237B6377000E994D /* TranslationService.swift */; };
+		4C4F137D237B8845000E994D /* UserDefaultPropertyWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0D6237A8C110031CAC2 /* UserDefaultPropertyWrapper.swift */; };
 		4CADD0782379AF0F0031CAC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0772379AF0F0031CAC2 /* AppDelegate.swift */; };
 		4CADD07A2379AF0F0031CAC2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0792379AF0F0031CAC2 /* SceneDelegate.swift */; };
 		4CADD07E2379AF120031CAC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CADD07D2379AF120031CAC2 /* Assets.xcassets */; };
 		4CADD0812379AF120031CAC2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CADD0802379AF120031CAC2 /* Preview Assets.xcassets */; };
 		4CADD0842379AF120031CAC2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CADD0822379AF120031CAC2 /* LaunchScreen.storyboard */; };
 		4CADD08F2379AF130031CAC2 /* NYT_Mars_EditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD08E2379AF130031CAC2 /* NYT_Mars_EditionTests.swift */; };
-		4CADD09B2379B07E0031CAC2 /* NYTArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD09A2379B07E0031CAC2 /* NYTArticle.swift */; };
+		4CADD09B2379B07E0031CAC2 /* NYTArticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD09A2379B07E0031CAC2 /* NYTArticleModel.swift */; };
 		4CADD0BB2379B16A0031CAC2 /* AppNavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0A22379B16A0031CAC2 /* AppNavigationCoordinator.swift */; };
 		4CADD0BC2379B16A0031CAC2 /* ArticleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0A32379B16A0031CAC2 /* ArticleListViewController.swift */; };
 		4CADD0BE2379B16A0031CAC2 /* ViewControllerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0A52379B16A0031CAC2 /* ViewControllerCoordinator.swift */; };
@@ -27,6 +30,7 @@
 		4CADD0CF2379B54A0031CAC2 /* ImageRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0CC2379B54A0031CAC2 /* ImageRequestTests.swift */; };
 		4CADD0D02379B54A0031CAC2 /* NYTArticlesRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0CD2379B54A0031CAC2 /* NYTArticlesRequestTests.swift */; };
 		4CADD0D12379B54A0031CAC2 /* NYTServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0CE2379B54A0031CAC2 /* NYTServiceTests.swift */; };
+		4CADD0D5237A82AC0031CAC2 /* UIView+Anchoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0D4237A82AC0031CAC2 /* UIView+Anchoring.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C4F1379237B4CD8000E994D /* AppProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppProperties.swift; sourceTree = "<group>"; };
+		4C4F137B237B6377000E994D /* TranslationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationService.swift; sourceTree = "<group>"; };
 		4CADD0742379AF0F0031CAC2 /* NYT Mars Edition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NYT Mars Edition.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CADD0772379AF0F0031CAC2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CADD0792379AF0F0031CAC2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -50,7 +56,7 @@
 		4CADD08A2379AF130031CAC2 /* NYT Mars EditionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NYT Mars EditionTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CADD08E2379AF130031CAC2 /* NYT_Mars_EditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NYT_Mars_EditionTests.swift; sourceTree = "<group>"; };
 		4CADD0902379AF130031CAC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4CADD09A2379B07E0031CAC2 /* NYTArticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NYTArticle.swift; sourceTree = "<group>"; };
+		4CADD09A2379B07E0031CAC2 /* NYTArticleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NYTArticleModel.swift; sourceTree = "<group>"; };
 		4CADD0A22379B16A0031CAC2 /* AppNavigationCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppNavigationCoordinator.swift; sourceTree = "<group>"; };
 		4CADD0A32379B16A0031CAC2 /* ArticleListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleListViewController.swift; sourceTree = "<group>"; };
 		4CADD0A52379B16A0031CAC2 /* ViewControllerCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerCoordinator.swift; sourceTree = "<group>"; };
@@ -64,6 +70,8 @@
 		4CADD0CC2379B54A0031CAC2 /* ImageRequestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRequestTests.swift; sourceTree = "<group>"; };
 		4CADD0CD2379B54A0031CAC2 /* NYTArticlesRequestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NYTArticlesRequestTests.swift; sourceTree = "<group>"; };
 		4CADD0CE2379B54A0031CAC2 /* NYTServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NYTServiceTests.swift; sourceTree = "<group>"; };
+		4CADD0D4237A82AC0031CAC2 /* UIView+Anchoring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Anchoring.swift"; sourceTree = "<group>"; };
+		4CADD0D6237A8C110031CAC2 /* UserDefaultPropertyWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultPropertyWrapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,7 +151,7 @@
 		4CADD0992379B07E0031CAC2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				4CADD09A2379B07E0031CAC2 /* NYTArticle.swift */,
+				4CADD09A2379B07E0031CAC2 /* NYTArticleModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -153,6 +161,7 @@
 			children = (
 				4CADD0A22379B16A0031CAC2 /* AppNavigationCoordinator.swift */,
 				4CADD0A32379B16A0031CAC2 /* ArticleListViewController.swift */,
+				4CADD0D4237A82AC0031CAC2 /* UIView+Anchoring.swift */,
 				4CADD0A52379B16A0031CAC2 /* ViewControllerCoordinator.swift */,
 			);
 			path = UI;
@@ -172,8 +181,10 @@
 		4CADD0B12379B16A0031CAC2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				4CADD0B22379B16A0031CAC2 /* SOAService.swift */,
+				4C4F1379237B4CD8000E994D /* AppProperties.swift */,
 				4CADD0B32379B16A0031CAC2 /* NYTService.swift */,
+				4CADD0B22379B16A0031CAC2 /* SOAService.swift */,
+				4C4F137B237B6377000E994D /* TranslationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -181,6 +192,7 @@
 		4CADD0B42379B16A0031CAC2 /* Types */ = {
 			isa = PBXGroup;
 			children = (
+				4CADD0D6237A8C110031CAC2 /* UserDefaultPropertyWrapper.swift */,
 				4CADD0B52379B16A0031CAC2 /* Bindable.swift */,
 			);
 			path = Types;
@@ -287,18 +299,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CADD0D5237A82AC0031CAC2 /* UIView+Anchoring.swift in Sources */,
 				4CADD0C72379B16A0031CAC2 /* UnauthenticatedDataRequest.swift in Sources */,
 				4CADD0782379AF0F0031CAC2 /* AppDelegate.swift in Sources */,
 				4CADD0BE2379B16A0031CAC2 /* ViewControllerCoordinator.swift in Sources */,
 				4CADD0C92379B16A0031CAC2 /* SOAService.swift in Sources */,
 				4CADD0CA2379B16A0031CAC2 /* NYTService.swift in Sources */,
+				4C4F137D237B8845000E994D /* UserDefaultPropertyWrapper.swift in Sources */,
 				4CADD0C62379B16A0031CAC2 /* ImageRequest.swift in Sources */,
 				4CADD0C82379B16A0031CAC2 /* UnauthenticatedDecodableRequest.swift in Sources */,
-				4CADD09B2379B07E0031CAC2 /* NYTArticle.swift in Sources */,
+				4CADD09B2379B07E0031CAC2 /* NYTArticleModel.swift in Sources */,
+				4C4F137A237B4CD8000E994D /* AppProperties.swift in Sources */,
 				4CADD0CB2379B16A0031CAC2 /* Bindable.swift in Sources */,
 				4CADD0C52379B16A0031CAC2 /* NYTArticlesRequest.swift in Sources */,
 				4CADD0BC2379B16A0031CAC2 /* ArticleListViewController.swift in Sources */,
 				4CADD0BB2379B16A0031CAC2 /* AppNavigationCoordinator.swift in Sources */,
+				4C4F137C237B6377000E994D /* TranslationService.swift in Sources */,
 				4CADD07A2379AF0F0031CAC2 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
