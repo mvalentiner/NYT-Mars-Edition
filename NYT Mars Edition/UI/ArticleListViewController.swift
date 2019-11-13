@@ -9,29 +9,49 @@
 import UIKit
 
 class ArticleListViewController : UITableViewController {
-
-	// ViewModel for the ArticleListViewController
-	struct NYTArticleSummaryViewModel: Equatable {
-		let id: Int
-		let title: String
-		let image: UIImage
-	}
-
 	// Dependency(s)
 	private var appProperties: AppProperties
 	private var nytService: NYTService
-	private var translationService: TranslationService
+
+	// ViewModel for the ArticleListViewController
+	fileprivate struct NYTArticleSummaryViewModel: Equatable {
+		let id: Int
+		let title: String
+		let image: UIImage
+		let shouldTranslate: Bool
+
+		init(from article: NYTArticle, using translationService: TranslationService, shouldTranslate: Bool) {
+			self.id = article.model.id
+			self.title = shouldTranslate ? translationService.translate(text: article.model.title) : article.model.title
+			self.image =  article.topImage
+			self.shouldTranslate = shouldTranslate
+		}
+	}
 
 	// ViewModel
-	var articleSummaries = Bindable<[NYTArticleSummaryViewModel]>([])
-	
+	private var articleSummaries = Bindable<[NYTArticleSummaryViewModel]>([])
+
 	init(appProperties: AppProperties, nytService: NYTService, translationService: TranslationService) {
 		self.appProperties = appProperties
 		self.nytService = nytService
-		self.translationService = translationService
 
 		super.init(style: .plain)
 
+		// Bind to NYTService.nytArticles to update view model when there are new nytArticles.
+		self.nytService.nytArticles.bind { (oldArticleList, newArticleList) in
+			guard oldArticleList != newArticleList else {
+				// No change, so don't update the UI.
+				return
+			}
+			// Transform NYTService.nytArticles into NYTArticleSummaryViewModels
+			self.articleSummaries.value.removeAll()
+			let summaries = newArticleList.map {
+				NYTArticleSummaryViewModel(from: $0, using: translationService, shouldTranslate: appProperties.isTranslateOn.value)
+			}
+			self.articleSummaries.value.append(contentsOf: summaries)
+		}
+
+		// Bind to NYTService.nytArticles to update the UI when it changes.
 		self.articleSummaries.bind { (oldArticleList, newArticleList) in
 			guard oldArticleList != newArticleList else {
 				// No change, so don't update the UI.
@@ -42,15 +62,16 @@ class ArticleListViewController : UITableViewController {
 			}
 		}
 
-		// Bind to NYTService.nytArticles
-		self.nytService.nytArticles.bind { (oldArticleList, newArticleList) in
-			guard oldArticleList != newArticleList else {
+		// Bind to self.appProperties.isTranslateOn to update the UI when it changes.
+		self.appProperties.isTranslateOn.bind { (oldValue, newValue) in
+			guard oldValue != newValue else {
 				// No change, so don't update the UI.
 				return
 			}
 			// Transform NYTService.nytArticles into NYTArticleSummaryViewModels
-			let summaries = newArticleList.map {
-				NYTArticleSummaryViewModel(id: $0.model.id, title: translationService.translate(text: $0.model.title), image: $0.topImage)
+			self.articleSummaries.value.removeAll()
+			let summaries = self.nytService.nytArticles.value.map {
+				NYTArticleSummaryViewModel(from: $0, using: translationService, shouldTranslate: newValue)
 			}
 			self.articleSummaries.value.append(contentsOf: summaries)
 		}
@@ -60,8 +81,8 @@ class ArticleListViewController : UITableViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	static let articleCellReuseId = "articleCell"
-	static let translateSwitchCellReuseId = "translateSwitchCell"
+	fileprivate static let articleCellReuseId = "articleCell"
+	fileprivate static let translateSwitchCellReuseId = "translateSwitchCell"
 
 	override func viewDidLoad() {
 		self.tableView.register(ArticleCell.self, forCellReuseIdentifier: ArticleListViewController.articleCellReuseId)
@@ -74,7 +95,7 @@ class ArticleListViewController : UITableViewController {
 		case 0:
 			return 1
 		case 1:
-			return self.nytService.nytArticles.value.count
+			return self.articleSummaries.value.count
 		default:
 			fatalError("\(#function), indexPath.section out of range.")
 		}
@@ -90,14 +111,14 @@ class ArticleListViewController : UITableViewController {
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: ArticleListViewController.translateSwitchCellReuseId, for: indexPath) as? TranslateSwitchCell else {
 				fatalError("\(#function), table cell of type TranslateSwitchCell is not registered.")
 			}
-			cell.configure(with: self.appProperties.isTranslateOn, andSwitchToggleHandler: handleTranslateToggle)
+			cell.configure(with: self.appProperties.isTranslateOn.value, andSwitchToggleHandler: handleTranslateToggle)
 			return cell
 
 		case 1:
 			guard let cell = tableView.dequeueReusableCell(withIdentifier: ArticleListViewController.articleCellReuseId, for: indexPath) as? ArticleCell else {
 				fatalError("\(#function), table cell of type ArticleCell is not registered.")
 			}
-			let article = self.nytService.nytArticles.value[indexPath.row]
+			let article = self.articleSummaries.value[indexPath.row]
 			cell.configure(for: article)
 			return cell
 
@@ -117,12 +138,11 @@ class ArticleListViewController : UITableViewController {
 	}
 	
 	private func handleTranslateToggle(isOn: Bool) {
-		self.appProperties.isTranslateOn = isOn
-//		self.tableView.reloadData()
+		self.appProperties.isTranslateOn.value = isOn
 	}
 }
 
-class TranslateSwitchCell: UITableViewCell  {
+fileprivate class TranslateSwitchCell: UITableViewCell  {
 	// Subview
 	private let switchView = UISwitch()
 
@@ -138,7 +158,7 @@ class TranslateSwitchCell: UITableViewCell  {
 		switchView.anchorToYCenterOfParent()
 	}
 
-	internal func configure(with switchState: Bool, andSwitchToggleHandler handler: @escaping (Bool) -> Void) {
+	fileprivate func configure(with switchState: Bool, andSwitchToggleHandler handler: @escaping (Bool) -> Void) {
 		switchView.setOn(switchState, animated: false)
 		self.switchToggleHandler = handler
 	}
@@ -152,19 +172,19 @@ class TranslateSwitchCell: UITableViewCell  {
 	}
 }
 
-class ArticleCell: UITableViewCell {
+fileprivate class ArticleCell: UITableViewCell {
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 	}
 
-	init(for article: NYTArticle) {
+	fileprivate init(for article: ArticleListViewController.NYTArticleSummaryViewModel) {
 		super.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: ArticleListViewController.articleCellReuseId)
 		configure(for: article)
 		contentView.backgroundColor = .cyan
 	}
 
-	internal func configure(for article: NYTArticle) {
-		textLabel?.text = article.model.title
+	fileprivate func configure(for article: ArticleListViewController.NYTArticleSummaryViewModel) {
+		textLabel?.text = article.title
 	}
 	
 	required init?(coder: NSCoder) {

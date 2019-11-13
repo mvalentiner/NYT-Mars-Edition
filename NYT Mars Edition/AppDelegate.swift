@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	private let serviceRegistry: ServiceRegistryImplementation = {
 		AppPropertiesImplementation.register()
 		NYTServiceImplementation.register()
-		TranslationServiceImplementation.register(appProperties: ServiceRegistry.appProperties)
+		TranslationServiceImplementation.register()
 		return ServiceRegistry
 	}()
 

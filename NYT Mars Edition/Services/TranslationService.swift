@@ -22,7 +22,6 @@ extension ServiceRegistryImplementation {
 
 protocol TranslationService : SOAService {
 	func translate(text: String) -> String
-	var appProperties: AppProperties { get }
 }
 
 extension TranslationService {
@@ -34,24 +33,12 @@ extension TranslationService {
 	}
 	// MARK: TranslationService protocol requirement
 	internal func translate(text: String) -> String {
-		guard appProperties.isTranslateOn else {
-			return text
-		}
-		return applyRules(text: text)
-	}
-	private func applyRules(text: String) -> String {
-		return text
+		return "This is Martian"
 	}
 }
 
 internal class TranslationServiceImplementation : TranslationService {
-	static func register(appProperties: AppProperties) {
-		ServiceRegistry.add(service: TranslationServiceImplementation(appProperties: appProperties))
-	}
-	
-	let appProperties: AppProperties
-	
-	init(appProperties: AppProperties) {
-		self.appProperties = appProperties
+	static func register() {
+		ServiceRegistry.add(service: TranslationServiceImplementation())
 	}
 }

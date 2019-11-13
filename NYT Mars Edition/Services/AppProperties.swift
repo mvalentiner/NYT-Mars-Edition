@@ -21,7 +21,7 @@ extension ServiceRegistryImplementation {
 }
 
 protocol AppProperties : SOAService {
-	var isTranslateOn: Bool { get set }
+	var isTranslateOn: Bindable<Bool> { get set }
 }
 
 extension AppProperties {
@@ -39,6 +39,9 @@ internal class AppPropertiesImplementation : AppProperties {
 		ServiceRegistry.add(service: AppPropertiesImplementation())
 	}
 
-	@UserDefault("isTranslate", defaultValue: false)
-	var isTranslateOn: Bool
+	var isTranslateOn: Bindable<Bool> = Bindable<Bool>(UserDefaults.standard.bool(forKey: "isTranslateOn")) {
+		didSet {
+			UserDefaults.standard.set(isTranslateOn.value, forKey: "isTranslateOn")
+		}
+	}
 }
