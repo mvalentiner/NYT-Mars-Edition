@@ -21,6 +21,7 @@ extension ServiceRegistryImplementation {
 }
 
 protocol TranslationService : SOAService {
+	func translate(article: NYTArticle) -> NYTArticle
 	func translate(text: String) -> String
 }
 
@@ -32,6 +33,11 @@ extension TranslationService {
 		}
 	}
 	// MARK: TranslationService protocol requirement
+	func translate(article: NYTArticle) -> NYTArticle {
+	let model = NYTArticleModel(title: translate(text: article.model.title), body: translate(text: article.model.body), images: article.model.images)
+		return NYTArticle(model: model, topImage: article.topImage, images: article.images)
+	}
+	
 	internal func translate(text: String) -> String {
 		return "This is Martian"
 	}

@@ -21,6 +21,7 @@ struct NYTArticle: Equatable {
 /// NYTService Interface
 protocol NYTService: SOAService {
 	var nytArticles: Bindable<[NYTArticle]> { get set }
+	func nytArticle(for id: Int) -> NYTArticle?
 	func refreshArticles()
 }
 
@@ -39,15 +40,30 @@ internal class NYTServiceImplementation: NYTService {
 	}
 
 	internal var nytArticles = Bindable<[NYTArticle]>([])
-	
+	private var nytArticleDict = Dictionary<Int, NYTArticle>()
+
+	init() {
+		// Keep the nytArticleDict insync with nytArticles array.
+    	nytArticles.bind { (_, newArticles) in
+			newArticles.forEach { (article) in
+				self.nytArticleDict[article.model.id] = article
+			}
+		}
+	}
+
 	internal let articleAccessQueue = DispatchQueue(label: "ArticleAccessQueue", attributes: .concurrent)
 	private func append(article viewModel: NYTArticle) {
 		articleAccessQueue.sync(flags: .barrier) {
 			self.nytArticles.value.append(viewModel)
 		}
 	}
+
+	func nytArticle(for id: Int) -> NYTArticle? {
+		return nytArticleDict[id]
+	}
 	
 	internal func refreshArticles() {
+		nytArticles.value.removeAll()
 		NYTArticlesRequest().load { decodableRequestResult in
 			switch decodableRequestResult {
 			case .failure(let dataRequestError):

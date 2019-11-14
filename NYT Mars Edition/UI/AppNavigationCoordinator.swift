@@ -31,8 +31,15 @@ internal class AppNavigationCoordinator: MainAppCoordinator {
 	}
 
 	internal func presentArticleScreen(articleId: Int) -> Void {
-		print("\(#function), articleId = \(articleId)")
-		let articleScreen = ArticleScreen()
+		guard var article = ServiceRegistry.nytService.nytArticle(for: articleId) else {
+			return
+		}
+
+		if ServiceRegistry.appProperties.isTranslateOn.value {
+			article = ServiceRegistry.translationService.translate(article: article)
+		}
+
+		let articleScreen = ArticleScreen(article: article)
 		let hostingController = UIHostingController(rootView: articleScreen)
 		present(hostingController)
 	}
