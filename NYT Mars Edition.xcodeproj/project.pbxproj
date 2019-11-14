@@ -17,7 +17,7 @@
 		4CADD07E2379AF120031CAC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CADD07D2379AF120031CAC2 /* Assets.xcassets */; };
 		4CADD0812379AF120031CAC2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CADD0802379AF120031CAC2 /* Preview Assets.xcassets */; };
 		4CADD0842379AF120031CAC2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CADD0822379AF120031CAC2 /* LaunchScreen.storyboard */; };
-		4CADD08F2379AF130031CAC2 /* NYT_Mars_EditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD08E2379AF130031CAC2 /* NYT_Mars_EditionTests.swift */; };
+		4CADD08F2379AF130031CAC2 /* TranslationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD08E2379AF130031CAC2 /* TranslationServiceTests.swift */; };
 		4CADD09B2379B07E0031CAC2 /* NYTArticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD09A2379B07E0031CAC2 /* NYTArticleModel.swift */; };
 		4CADD0BB2379B16A0031CAC2 /* AppNavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0A22379B16A0031CAC2 /* AppNavigationCoordinator.swift */; };
 		4CADD0BC2379B16A0031CAC2 /* ArticleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0A32379B16A0031CAC2 /* ArticleListViewController.swift */; };
@@ -58,7 +58,7 @@
 		4CADD0832379AF120031CAC2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4CADD0852379AF120031CAC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CADD08A2379AF130031CAC2 /* NYT Mars EditionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NYT Mars EditionTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4CADD08E2379AF130031CAC2 /* NYT_Mars_EditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NYT_Mars_EditionTests.swift; sourceTree = "<group>"; };
+		4CADD08E2379AF130031CAC2 /* TranslationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationServiceTests.swift; sourceTree = "<group>"; };
 		4CADD0902379AF130031CAC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CADD09A2379B07E0031CAC2 /* NYTArticleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NYTArticleModel.swift; sourceTree = "<group>"; };
 		4CADD0A22379B16A0031CAC2 /* AppNavigationCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppNavigationCoordinator.swift; sourceTree = "<group>"; };
@@ -146,9 +146,9 @@
 			children = (
 				4CADD0CC2379B54A0031CAC2 /* ImageRequestTests.swift */,
 				4CADD0902379AF130031CAC2 /* Info.plist */,
-				4CADD08E2379AF130031CAC2 /* NYT_Mars_EditionTests.swift */,
 				4CADD0CD2379B54A0031CAC2 /* NYTArticlesRequestTests.swift */,
 				4CADD0CE2379B54A0031CAC2 /* NYTServiceTests.swift */,
+				4CADD08E2379AF130031CAC2 /* TranslationServiceTests.swift */,
 			);
 			path = "NYT Mars EditionTests";
 			sourceTree = "<group>";
@@ -332,7 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CADD0D02379B54A0031CAC2 /* NYTArticlesRequestTests.swift in Sources */,
-				4CADD08F2379AF130031CAC2 /* NYT_Mars_EditionTests.swift in Sources */,
+				4CADD08F2379AF130031CAC2 /* TranslationServiceTests.swift in Sources */,
 				4CADD0CF2379B54A0031CAC2 /* ImageRequestTests.swift in Sources */,
 				4CADD0D12379B54A0031CAC2 /* NYTServiceTests.swift in Sources */,
 			);

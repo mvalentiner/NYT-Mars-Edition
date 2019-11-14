@@ -11,7 +11,7 @@ import XCTest
 
 class NYTServiceTests: XCTestCase {
 	
-	var nytService: NYTService = ServiceRegistry.nytService
+	var nytService = ServiceRegistry.nytService
 
     func testNYTService_refreshArticles() {
     	let expectation = XCTestExpectation(description: "Test NYTArticlesRequestTests.testNYTArticlesRequest_loadArticles")
