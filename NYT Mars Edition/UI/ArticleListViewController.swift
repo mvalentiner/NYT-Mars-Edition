@@ -135,14 +135,12 @@ class ArticleListViewController : UITableViewController {
 		}
 	}
 
-	static let articleCellHeight = CGFloat(100.0)
-
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		switch indexPath.section {
 		case 0:
 			return CGFloat(50.0)
 		case 1:
-			return ArticleListViewController.articleCellHeight
+			return UITableView.automaticDimension
 		default:
 			fatalError("\(#function), indexPath.section out of range.")
 		}
@@ -204,7 +202,7 @@ fileprivate class TranslateSwitchCell: UITableViewCell  {
 }
 
 fileprivate class ArticleCell: UITableViewCell {
-	let thunmbnailImageView: UIImageView = {
+	let thumbnailImageView: UIImageView = {
 		let image = UIImageView(image: UIImage(named: "image_placeholder"))
 		image.contentMode = .scaleAspectFit
 		return image
@@ -213,34 +211,26 @@ fileprivate class ArticleCell: UITableViewCell {
 		let label = UILabel()
 		label.adjustsFontSizeToFitWidth = true
 		label.lineBreakMode = .byWordWrapping
-		label.numberOfLines = 5
+		label.numberOfLines = 0
 		return label
 	}()
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		
-		contentView.addSubview(thunmbnailImageView)
+
 		contentView.addSubview(titleLabel)
+		contentView.addSubview(thumbnailImageView)
 	}
 
-	fileprivate func configure(for article: ArticleListViewController.NYTArticleSummaryViewModel) {
-		thunmbnailImageView.image = article.image
-		// Position the image view
-		thunmbnailImageView.anchorTo(left: contentView.leftAnchor, leftPadding: 20.0)
-		thunmbnailImageView.anchorToYCenterOfParent()
-		// Size the image view
-		let cgImage = article.image.cgImage!
-		let height = min(ArticleListViewController.articleCellHeight - 10.0, CGFloat(cgImage.height))
-		let scale = height / CGFloat(cgImage.height)
-		let width = CGFloat(cgImage.width) * scale
-		thunmbnailImageView.constrainTo(width: width)
-		thunmbnailImageView.constrainTo(height: height)
+	var article: ArticleListViewController.NYTArticleSummaryViewModel?
 
+	fileprivate func configure(for article: ArticleListViewController.NYTArticleSummaryViewModel) {
+		self.article = article
+	
 		let font = UIFont(name: "TimesNewRomanPS-BoldMT", size: CGFloat(18.0)) as Any
 		let paragraphStyle: NSMutableParagraphStyle = {
 			let paragraphStyle = NSMutableParagraphStyle()
-			paragraphStyle.alignment = .left
+			paragraphStyle.alignment = .center
 			paragraphStyle.lineBreakMode = .byWordWrapping
 			return paragraphStyle
 		}()
@@ -249,12 +239,33 @@ fileprivate class ArticleCell: UITableViewCell {
 			.paragraphStyle: paragraphStyle
 		]
 		titleLabel.attributedText = NSAttributedString(string: article.title, attributes: attributes)
-		// Position the label
-		titleLabel.anchorTo(left: thunmbnailImageView.rightAnchor, top: contentView.topAnchor, right: contentView.rightAnchor, bottom: contentView.bottomAnchor,
-			leftPadding: 20.0, topPadding: 10.0, rightPadding: 20.0, bottomPadding: 10.0)
-		// Size the label
+
+		thumbnailImageView.image = article.image
+
+		self.setNeedsUpdateConstraints()
 	}
-	
+
+	override func updateConstraints() {
+		super.updateConstraints()
+		titleLabel.anchorTo(left: contentView.leftAnchor, top: contentView.topAnchor, right: contentView.rightAnchor,
+			leftPadding: 20.0, topPadding: 10.0, rightPadding: 20.0)
+
+		thumbnailImageView.anchorTo(left: contentView.leftAnchor, top: titleLabel.bottomAnchor, right: contentView.rightAnchor, bottom: contentView.bottomAnchor,
+			leftPadding: 20.0, topPadding: 10.0, rightPadding: 20.0, bottomPadding: 10.0)
+
+		// Size the image view
+		guard let cgImage = self.article?.image.cgImage else {
+			return
+		}
+        let labelAreaHeight = titleLabel.frame.height + 40.0
+		let articleCellHeight = CGFloat(200.0)
+		let height = min(articleCellHeight - labelAreaHeight, CGFloat(cgImage.height))
+		let scale = height / CGFloat(cgImage.height)
+		let width = CGFloat(cgImage.width) * scale
+		thumbnailImageView.constrainTo(width: width)
+		thumbnailImageView.constrainTo(height: height)
+	}
+
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}

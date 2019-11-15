@@ -49,12 +49,12 @@ extension UIView {
 		self.centerXAnchor.constraint(equalTo: parentView.centerXAnchor).isActive = true
 		self.centerYAnchor.constraint(equalTo: parentView.centerYAnchor).isActive = true
 	}
-
+	
 	func constrainTo(width: CGFloat) {
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.widthAnchor.constraint(equalToConstant: width).isActive = true
 	}
-	
+
 	func constrainTo(height: CGFloat) {
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.heightAnchor.constraint(equalToConstant: height).isActive = true
