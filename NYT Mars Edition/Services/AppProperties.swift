@@ -1,9 +1,9 @@
 //
 //  AppProperties.swift
-//  Places
+//  NYT Mars Edition
 //
-//  Created by Michael Valentiner on 3/20/19.
-//  Copyright © 2019 Michael Valentiner. All rights reserved.
+//  Created by Michael Valentiner on 11/11/19.
+//  Copyright © 2019 Heliotropix, LLC. All rights reserved.
 //
 
 import Foundation
@@ -31,7 +31,6 @@ extension AppProperties {
 			return AppPropertiesServiceName.name
 		}
 	}
-
 }
 
 internal class AppPropertiesImplementation : AppProperties {

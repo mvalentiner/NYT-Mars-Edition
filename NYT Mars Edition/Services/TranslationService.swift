@@ -1,24 +1,12 @@
 //
 //  TranslationService.swift
-//  Places
+//  NYT Mars Edition
 //
-//  Created by Michael Valentiner on 3/20/19.
-//  Copyright © 2019 Michael Valentiner. All rights reserved.
+//  Created by Michael Valentiner on 11/14/19.
+//  Copyright © 2019 Heliotropix, LLC. All rights reserved.
 //
 
 import Foundation
-
-internal struct TranslationServiceName {
-	static let name = "TranslationService"
-}
-
-extension ServiceRegistryImplementation {
-	var translationService : TranslationService {
-		get {
-			return serviceWith(name: TranslationServiceName.name) as! TranslationService	// Intentional forced unwrapping
-		}
-	}
-}
 
 protocol TranslationService : SOAService {
 	func translate(article: NYTArticle) -> NYTArticle
@@ -32,10 +20,11 @@ extension TranslationService {
 			return TranslationServiceName.name
 		}
 	}
-	// MARK: TranslationService protocol requirement
+
+	// MARK: TranslationService protocol requirements
 	func translate(article: NYTArticle) -> NYTArticle {
-	let model = NYTArticleModel(title: translate(text: article.model.title), body: translate(text: article.model.body), images: article.model.images)
-		return NYTArticle(model: model, topImage: article.topImage, images: article.images)
+		let model = NYTArticleModel(title: translate(text: article.model.title), body: translate(text: article.model.body), images: article.model.images)
+			return NYTArticle(model: model, topImage: article.topImage, images: article.images)
 	}
 	
 	internal func translate(text: String) -> String {
@@ -107,10 +96,8 @@ extension TranslationService {
 			for i in 0..<6 {
 				if i < wordArray.count, wordArray[i].isUppercase {
 					translatedWord += uppercaseBoinga[i]
-				} else {	// if i < strippedWord.count {
+				} else {
 					translatedWord += lowercaseBoinga[i]
-//				} else {
-//					break
 				}
 			}
 		} else {
@@ -124,5 +111,17 @@ extension TranslationService {
 internal class TranslationServiceImplementation : TranslationService {
 	static func register() {
 		ServiceRegistry.add(service: TranslationServiceImplementation())
+	}
+}
+
+internal struct TranslationServiceName {
+	static let name = "TranslationService"
+}
+
+extension ServiceRegistryImplementation {
+	var translationService : TranslationService {
+		get {
+			return serviceWith(name: TranslationServiceName.name) as! TranslationService	// Intentional forced unwrapping
+		}
 	}
 }

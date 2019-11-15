@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4C4F137A237B4CD8000E994D /* AppProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F1379237B4CD8000E994D /* AppProperties.swift */; };
 		4C4F137C237B6377000E994D /* TranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F137B237B6377000E994D /* TranslationService.swift */; };
-		4C4F137D237B8845000E994D /* UserDefaultPropertyWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0D6237A8C110031CAC2 /* UserDefaultPropertyWrapper.swift */; };
 		4C4F137F237BCD0B000E994D /* ArticleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F137E237BCD0B000E994D /* ArticleScreen.swift */; };
 		4C4F1381237BCE89000E994D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4C4F1380237BCE89000E994D /* README.md */; };
 		4CADD0782379AF0F0031CAC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CADD0772379AF0F0031CAC2 /* AppDelegate.swift */; };
@@ -75,7 +74,6 @@
 		4CADD0CD2379B54A0031CAC2 /* NYTArticlesRequestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NYTArticlesRequestTests.swift; sourceTree = "<group>"; };
 		4CADD0CE2379B54A0031CAC2 /* NYTServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NYTServiceTests.swift; sourceTree = "<group>"; };
 		4CADD0D4237A82AC0031CAC2 /* UIView+Anchoring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Anchoring.swift"; sourceTree = "<group>"; };
-		4CADD0D6237A8C110031CAC2 /* UserDefaultPropertyWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultPropertyWrapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,7 +197,6 @@
 			children = (
 				4CADD0B52379B16A0031CAC2 /* Bindable.swift */,
 				4CADD0D4237A82AC0031CAC2 /* UIView+Anchoring.swift */,
-				4CADD0D6237A8C110031CAC2 /* UserDefaultPropertyWrapper.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -312,7 +309,6 @@
 				4CADD0BE2379B16A0031CAC2 /* ViewControllerCoordinator.swift in Sources */,
 				4CADD0C92379B16A0031CAC2 /* SOAService.swift in Sources */,
 				4CADD0CA2379B16A0031CAC2 /* NYTService.swift in Sources */,
-				4C4F137D237B8845000E994D /* UserDefaultPropertyWrapper.swift in Sources */,
 				4CADD0C62379B16A0031CAC2 /* ImageRequest.swift in Sources */,
 				4CADD0C82379B16A0031CAC2 /* UnauthenticatedDecodableRequest.swift in Sources */,
 				4CADD09B2379B07E0031CAC2 /* NYTArticleModel.swift in Sources */,

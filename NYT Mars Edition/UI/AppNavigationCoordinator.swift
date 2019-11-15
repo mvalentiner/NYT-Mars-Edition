@@ -11,15 +11,16 @@ import CoreLocation
 import SwiftUI
 import UIKit
 
-/// MainAppCoordinator aggregates the generic functionality of ViewControllerCoordinator with the app specific navigation functions defined here.
+/// MainAppCoordinator aggregates the generic functionality of ViewControllerCoordinator with the app specific navigation functions.
 protocol MainAppCoordinator: ViewControllerCoordinator {
 	func presentArticleListScreen()
 	func presentArticleScreen(articleId: Int) -> Void
 }
 
 internal class AppNavigationCoordinator: MainAppCoordinator {
-	/// RootController
+
 	var rootController: UINavigationController
+
 	init(using rootController: UINavigationController) {
 		self.rootController = rootController
 	}

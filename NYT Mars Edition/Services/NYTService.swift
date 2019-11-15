@@ -18,7 +18,7 @@ struct NYTArticle: Equatable {
 	let images: [UIImage]
 }
 
-/// NYTService Interface
+/// NYTService - Interface to service that returns NYT article models
 protocol NYTService: SOAService {
 	var nytArticles: Bindable<[NYTArticle]> { get set }
 	func nytArticle(for id: Int) -> NYTArticle?
@@ -34,13 +34,11 @@ extension NYTService {
 	}
 }
 
+/// NYTService oncrete implmentation
 internal class NYTServiceImplementation: NYTService {
 	static func register() {
 		NYTServiceImplementation().register()
 	}
-
-	internal var nytArticles = Bindable<[NYTArticle]>([])
-	private var nytArticleDict = Dictionary<Int, NYTArticle>()
 
 	init() {
 		// Keep the nytArticleDict insync with nytArticles array.
@@ -51,6 +49,11 @@ internal class NYTServiceImplementation: NYTService {
 		}
 	}
 
+	// NYTService protocol requirements
+	internal var nytArticles = Bindable<[NYTArticle]>([])
+	private var nytArticleDict = Dictionary<Int, NYTArticle>()
+
+	// Serialize write access to nytArticles array.
 	internal let articleAccessQueue = DispatchQueue(label: "ArticleAccessQueue", attributes: .concurrent)
 	private func append(article viewModel: NYTArticle) {
 		articleAccessQueue.sync(flags: .barrier) {
@@ -61,7 +64,7 @@ internal class NYTServiceImplementation: NYTService {
 	func nytArticle(for id: Int) -> NYTArticle? {
 		return nytArticleDict[id]
 	}
-	
+
 	internal func refreshArticles() {
 		nytArticles.value.removeAll()
 		NYTArticlesRequest().load { decodableRequestResult in

@@ -6,6 +6,7 @@
 //  Copyright © 2019 Heliotropix, LLC. All rights reserved.
 //
 // SOAServices and ServiceRegistry implement the Service Locator pattern, https://en.wikipedia.org/wiki/Service_locator_pattern.
+
 // ServiceRegistryImplementation is a registry of SOAServices.
 // ServiceRegistry is shorthand for accessing the ServiceRegistryImplementation
 let ServiceRegistry = ServiceRegistryImplementation()

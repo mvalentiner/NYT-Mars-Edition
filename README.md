@@ -1,26 +1,62 @@
 #  NYT Mars Edition
 
-## TODO
-* ArticleListView UI
-** implement as UITableView to demonstrate I can implement UITableView
-** langauge switch at top
-*** toggling switch reloads table animated with translated articles
-** UITableView below
-** bind to articles array
-** on viewWillLoad make call to fetch articles
-optional wants:
-** swipe down to refresh
+### Solution
 
-* ArticleView
-** implement in SwiftUI
-optional want:
-** scrollable list of images
+My solution consists of the minimum required two screens implemented by `ArticleListViewController` (UIKit) and `ArticleScreen`. (SwiftUI).
 
-* fetch articles
-** convert from XML to JSON
-** decode from JSON
+The main architectual components are:
 
-* implement translationService
+* `ServiceRegistry` and `SOAService` pattern I've developed. `ServiceRegistry` implements the Service Locator pattern and `SOAServices` are used to 
+factor buisness logic out of `UIViewControllers`.
+
+* `AppNavigationCoordinator` uses the Coordinator pattern. I use it to factor navigation concerns out of `UIViewControllers` and SwiftUI `Views`.
+
+In addition, it is used to construct `UIViewControllers` and SwiftUI `Views` and configure them by injecting the services they use. Dependency management
+is encapsulated in `AppNavigationCoordinator`.
+
+There are three `SOAServices` I developed for the app:
+
+* `AppProperties` implements the persistent `isTranslateOn` property .
+
+* `NYTService`  fetchs articles from the server and caches NYTArticles. It utilizes `UnauthenticatedDecodableXMLRequest` and
+`UnauthenticatedDataRequest`, which I describe below.
+
+* `TranslationService` implements the rules for translating English to Martian.
+
+There are a number of utility classes that `NYTService` uses to make network requests to fetch data:
+
+* `UnauthenticatedDataRequest` is a protocol and protocol extension used to fecth data across the network. It simply requires an endpoint and
+invocation of the `load()` function to get data returned as Data.
+
+* `UnauthenticatedDecodableRequest` is a protocol and protocol extension used to fecth decodable  across the network. It simply requires
+an endpoint and the `Decoadeable` type of the data (as an associatedtype) to be returned. Two additional protocols built on `UnauthenticatedDecodableRequest` are:
+
+** `UnauthenticatedDecodableJSONRequest` and
+
+** `UnauthenticatedDecodableXMLRequest`, which is used in this app.
+
+Two concrete class built on these protocols are:
+
+** `NYTArticlesRequest`, built on `UnauthenticatedDecodableRequest` and 
+
+** `ImageRequest`, built on `UnauthenticatedDataRequest`. 
+
+An additional utility type that I use is `Bindable`.  This is my own light weight version of an RxSwift-like or ReactiveSwift-like type for binding to a property
+and reacting to it when it changes. By using my own implementation, I don't need to import a third-party framework and deal with the headaches
+of managing the dependency. I use `Bindable` in 
+
+** `NYTService` to notify observers when new data arrives and in
+
+** `ArticleListViewController` to update it's `NYTArticleSummaryViewModel` and to update the UI.
+
+I used UIKit to implement  `ArticleListViewController` to show I know UIKit.
+
+I used SwiftUI to implement `ArticleScreen` to show I'm learning SwiftUI.
+
+The NYT Mars EditionTests are a by product of the development work.
+
+# Michael Valentiner, Heliotropix, LLC
+## michael.valentiner@heliotropix.com
 
 ### Assignment
 
@@ -65,6 +101,3 @@ Once everything is complete, please zip up and return the project via email in y
 
 
 Thank you and good luck! Please let me know if you have any questions!
-
-### Solution
-

@@ -2,7 +2,7 @@
 //  TranslationServiceTests.swift
 //  NYT Mars EditionTests
 //
-//  Created by Michael Valentiner on 11/11/19.
+//  Created by Michael Valentiner on 11/14/19.
 //  Copyright © 2019 Heliotropix, LLC. All rights reserved.
 //
 
@@ -53,11 +53,11 @@ class TranslationServiceTests: XCTestCase {
 			XCTFail("\(#function), \"123\" failed")
 			return
 		}
-		guard translationService.translate(text: "20,000") == "20,000" else {
+		guard translationService.translate(text: "20,000") == "20000" else {
 			XCTFail("\(#function), \"20,000\" failed")
 			return
 		}
-		guard translationService.translate(text: "123 20,000") == "123 20,000" else {
+		guard translationService.translate(text: "123 20,000") == "123 20000" else {
 			XCTFail("\(#function), \"123 20,000\" failed")
 			return
 		}
@@ -94,14 +94,14 @@ class TranslationServiceTests: XCTestCase {
 
 	func testPunctuationRule() {
 		// ** Punctuation within words (e.g. we'll) can be discarded, all other punctuation (including paragraph spacing) must be maintained.
-//		guard translationService.translate(text: "w'l") == "wl" else {
-//			XCTFail("\(#function), \"w'l\" failed")
-//			return
-//		}
-//		guard translationService.translate(text: "we'll") == "boinga" else {
-//			XCTFail("\(#function), \"we'll\" failed")
-//			return
-//		}
+		guard translationService.translate(text: "w'l") == "wl" else {
+			XCTFail("\(#function), \"w'l\" failed")
+			return
+		}
+		guard translationService.translate(text: "we'll") == "boinga" else {
+			XCTFail("\(#function), \"we'll\" failed")
+			return
+		}
 		let result = translationService.translate(text: "May 18, abcde")
 		guard result == "May 18, boinga" else {
 			XCTFail("\(#function), \"May 18, abcde\" failed, result == \(result)")

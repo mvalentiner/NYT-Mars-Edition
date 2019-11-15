@@ -33,7 +33,7 @@ enum DataRequestError: Error {
 typealias DataRequestResult = Result<Data, DataRequestError>
 
 /// UnauthenticatedDataRequest - http request to request Data
-protocol UnauthenticatedDataRequest: class { 	// TODO: why : class?
+protocol UnauthenticatedDataRequest {
 	// Define the endpoint to call.
 	var endpointURL: String { get }
 	// Request the data.
@@ -41,8 +41,6 @@ protocol UnauthenticatedDataRequest: class { 	// TODO: why : class?
 
 	// Extension point for subtypes
 	func makeRequest(for url: URL) -> URLRequest
-
-	func shouldContinue(withHTTPStatusCode statusCode : Int) -> Bool
 }
 
 extension UnauthenticatedDataRequest {
@@ -61,13 +59,6 @@ extension UnauthenticatedDataRequest {
         }
 		let request = makeRequest(for: url)
 		sendRequest(request, onCompletion: onCompletion)
-	}
-	
-	internal func shouldContinue(withHTTPStatusCode statusCode : Int) -> Bool {
-		guard statusCode < 300 else {
-			return false
-		}
-		return true
 	}
 
 	private func sendRequest(_ request: URLRequest, onCompletion: @escaping (DataRequestResult) -> Void) {
@@ -102,5 +93,12 @@ extension UnauthenticatedDataRequest {
 			onCompletion(DataRequestResult.success(data))
 		})
 		task.resume()
+	}
+
+	private func shouldContinue(withHTTPStatusCode statusCode : Int) -> Bool {
+		guard statusCode < 300 else {
+			return false
+		}
+		return true
 	}
 }
